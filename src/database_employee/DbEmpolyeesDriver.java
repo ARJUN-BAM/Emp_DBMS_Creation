@@ -130,8 +130,17 @@ public class DbEmpolyeesDriver {
 					db.findMaxSal();
 					break;
 				case 2:
-					System.out.println("Currently Working on it");
-					break;
+					try {
+						System.out.println("Enter the Attribute: [name,empid,deptno,managerid,sal,comm,jobrole]");
+						String s = sc.next();
+						db.bubbleSort(s);
+						break;
+					}
+					catch(InputMismatchException ex)
+					{
+						System.out.println("Wrong input Try Again!!!");
+						continue;
+					}
 				case 3:
 					System.out.println("Currently Working on it");
 					break;

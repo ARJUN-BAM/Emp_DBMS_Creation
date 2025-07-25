@@ -163,42 +163,65 @@ public class DbEmpolyees {
 	
 	
 	
-	public void sortTable(String s)
+	public int checkSwap(Empolyees emp1 , Empolyees emp2,String s)
 	{
 		s = s.toLowerCase();
 		switch(s)
 		{
 			case "name":
-				break;
+				return emp1.name.compareTo(emp2.name);
+				
 			case "empid":
-				break;
+				return checkAtt(emp1.empid,emp2.empid);
 			case "deptno":
-				break;
+				return checkAtt(emp1.deptNo,emp2.deptNo);
 			case "managerid":
-				break;
-			case "hiredate":
-				break;
+				return checkAtt(emp1.managerId,emp2.managerId);
+//			case "hiredate":
+//				break;
 			case "sal":
-				break;
+				return checkAtt(emp1.sal,emp2.sal);
 			case "comm":
-				break;
+				return checkAtt(emp1.comm,emp2.comm);
 			case "jobrole":
-				break;
+				return emp1.jobRole.compareTo(emp2.jobRole);
 			default:
 				System.out.println("No such Attribute Found!!!");
-				break;
+				return -1;
 		}
 	}
 	
-	public void bubbleSort()
+	public void bubbleSort(String s)
 	{
-		for(int i = 0;i<emp.length;i++)
+		Empolyees[] temp = new Empolyees[count];
+		for(int i=0;i<count;i++)
+			temp[i] = emp[i];
+		for(int i = 0;i<temp.length;i++)
 		{
-			for(int j=0;j<emp.length-1-i;j++)
+			for(int j=0;j<temp.length-1-i;j++)
 			{
-				if()
+				if(checkSwap(temp[j],temp[j+1],s)>0)
+				{
+					Empolyees var = temp[j];
+					temp[j] = temp[j+1];
+					temp[j+1]=var;
+				}
 			}
 		}
+		for(int i = 0;i<count;i++)
+		{
+			System.out.println(temp[i]);
+		}
+	}
+	
+	public int checkAtt(double emp1,double emp2)
+	{
+		if(emp1<emp2)
+			return 0;
+		else if(emp1>emp2)
+			return 1;
+		else
+			return -1;
 	}
 	
 	
