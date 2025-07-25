@@ -60,7 +60,9 @@ public class DbEmpolyees {
 		}while(chance>0);
 		if(chance==0)
 		{
-			emp = null;
+			Empolyees[] temp = new Empolyees[10];
+			emp = temp;
+			count=0;
 			System.out.println("All the data has been deleted due to privacy purpose!!!");
 		}
 	}
@@ -158,4 +160,50 @@ public class DbEmpolyees {
 		System.out.println("empolyee with the highest salary: ");
 		System.out.println(emp[index]);
 	}
+	
+	
+	
+	public void sortTable(String s)
+	{
+		s = s.toLowerCase();
+		switch(s)
+		{
+			case "name":
+				break;
+			case "empid":
+				break;
+			case "deptno":
+				break;
+			case "managerid":
+				break;
+			case "hiredate":
+				break;
+			case "sal":
+				break;
+			case "comm":
+				break;
+			case "jobrole":
+				break;
+			default:
+				System.out.println("No such Attribute Found!!!");
+				break;
+		}
+	}
+	
+	public void bubbleSort()
+	{
+		for(int i = 0;i<emp.length;i++)
+		{
+			for(int j=0;j<emp.length-1-i;j++)
+			{
+				if()
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
 }
