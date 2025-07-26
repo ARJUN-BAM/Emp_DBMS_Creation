@@ -1,16 +1,22 @@
 package database_employee;
 
+import java.util.Arrays;
 import java.util.Scanner;
+
+
 
 public class DbEmpolyees {
 	private int count;
 	private String userName;
 	private String passWord;
 	private Empolyees[] emp = new Empolyees[10];
+	private Empolyees[][] rollback = new Empolyees[10][];
+	private int[] countRollback = new int[10];
+	private int savepoints = 1;
 	private Scanner sc = new Scanner(System.in);
 	private boolean connection;
 	private static DbEmpolyees ins ;
-	
+	private boolean intialSavepoint = false;
 	
 	
 
@@ -169,7 +175,7 @@ public class DbEmpolyees {
 		switch(s)
 		{
 			case "name":
-				return emp1.name.compareTo(emp2.name);
+				return emp1.name.toLowerCase().compareTo(emp2.name.toLowerCase());
 				
 			case "empid":
 				return checkAtt(emp1.empid,emp2.empid);
@@ -184,7 +190,7 @@ public class DbEmpolyees {
 			case "comm":
 				return checkAtt(emp1.comm,emp2.comm);
 			case "jobrole":
-				return emp1.jobRole.compareTo(emp2.jobRole);
+				return emp1.jobRole.toLowerCase().compareTo((emp2.jobRole).toLowerCase());
 			default:
 				System.out.println("No such Attribute Found!!!");
 				return -1;
@@ -226,7 +232,99 @@ public class DbEmpolyees {
 	
 	
 	
+	public void deleteById(int id)
+	{
+		int index = searchByEmpId(id);
+		if(index>0)
+		{
+			Empolyees[] temp = new Empolyees[count-1];
+			for(int i=0;i<count;i++)
+				if(i!=index)
+					temp[i]=emp[i];
+			System.out.println("The data of the empolyee: "+emp[index].name+" with id: "+emp[index].empid+" is deleted!!");
+			countRollback[savepoints] = count-1;
+			rollback[savepoints++] = emp;
+			emp = temp;
+			count--;
+		}
+		else
+		{
+			System.out.println("Empolyee not found!!!");
+		}
+		
+	}
+	
+	public void setIntialCommit()
+	{
+		if(connection)
+		{
+			if(!intialSavepoint)
+			{
+				rollback[0] = emp;
+				countRollback[0] = count;
+			}
+			else
+				System.out.println("Intial savepoint is already saved!!");
+		}
+		else
+			System.out.println("Need login Credentials!!!");
+	}
+	public void gitLog()
+	{
+		if(connection)
+		{
+			for(int i = 0;i<savepoints;i++)
+				if(rollback[i]!=null&&countRollback[i]>0)
+				{
+					System.out.println("Savepoint "+(i+1)+ " "+countRollback[i]);
+				}
+		}
+		else
+			System.out.println("LOgin Credentials Needed");
+	}
+	public void rollback()    //Only works when a record is delete. Can't rollback a added value yet.
+	{
+		if(connection)
+		{
+			System.out.print("Enter steps for rollback: ");
+			int step = sc.nextInt();
+			System.out.println(savepoints);
+			if(step<savepoints)
+			{
+				emp = rollback[savepoints-step];
+				count = countRollback[savepoints-step-1];
+				System.out.println("Successfully Rollbacked!!!");
+				for(int i=savepoints-step;i<savepoints;i++)
+				{
+					rollback[i] = null;
+					countRollback[i] = 0;
+					savepoints--;
+				}
+				System.out.println(count);
+			}
+			else
+				System.out.println("can't rollback more than maximum savepoints: "+(savepoints-1));
+		}
+		else
+		System.out.println("Login Credential Needed!!!");
+	}
 	
 	
-	
+	public void commit()
+	{
+		if(connection)
+		{
+			Arrays.fill(null, rollback);
+			int temp = countRollback[0];
+			Arrays.fill(null, countRollback);
+			countRollback[0] = temp;
+			rollback[0] = emp;
+			savepoints = 1;
+			System.out.println("The Transaction done are committed Successfully!!!");
+		}
+		else
+		{
+			System.out.println("NEED LOGIN CREDENTIALS!!!");
+		}
+	}
 }

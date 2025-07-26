@@ -1,7 +1,7 @@
 package database_employee;
 import java.util.*;
 
-public class DbEmpolyeesDriver {
+public class DbEmpolyeesDriver {//New Features Has Been added!!!
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
@@ -21,6 +21,7 @@ public class DbEmpolyeesDriver {
 		db.addEmp("James", 7900,30,7698, "03/12/1981",950.0,0.0, "Clerk");
 		db.addEmp("Ford", 7902,28,7566, "03/12/1981", 3000.0,0.0,"Analyst");
 		db.addEmp("Miller", 7934, 18, 7782, "23/01/1982", 1300.0,0.0, "Clerk");
+		db.setIntialCommit();
 		db.bruteOff();
 		int choice=-1;
 		mainLoop:
@@ -36,8 +37,9 @@ public class DbEmpolyeesDriver {
 			System.out.println("1. LOGIN ");
 			System.out.println("2. CHECK DATABASE");
 			System.out.println("3. ADD AN EMPOLYEE");
-			System.out.println("4. Operation and Features");
-			System.out.println("5. Quit");
+			System.out.println("4. DELETE AN EMPOLYEE");
+			System.out.println("5. Operation and Features");
+			System.out.println("6. Quit");
 			System.out.println();
 			System.out.print("Option: ");
 			if(sc.hasNextInt())
@@ -76,15 +78,20 @@ public class DbEmpolyeesDriver {
 						Math.round(Float.parseFloat(ed[6]) * 100.0) / 100.0,ed[7]);
 				break;
 			case 4:
-				newFeatures(db,sc);
+				System.out.print("Enter an Empolyee by ID: ");
+				int id = sc.nextInt();
+				db.deleteById(id);
 				break;
 			case 5:
+				newFeatures(db,sc);
+				break;
+			case 6:
 				break mainLoop;
 			default:
 				System.out.println("ENTER A VALID OPTION!!!");
 			}
 			
-		}while(choice != 5);
+		}while(choice != 6);
 		sc.close();
 		System.out.println("Thank you for the interaction");
 		
@@ -109,9 +116,9 @@ public class DbEmpolyeesDriver {
 				System.out.println("Choose Options: ");
 				System.out.println("1. FIND EMPOLYEE WITH MAX SALARY");
 				System.out.println("2. SORT RECORDS BY ATTRIBUTE");
-				System.out.println("3. ");
-				System.out.println("4. ");
-				System.out.println("5. ");
+				System.out.println("3. COMMIT THE CHANGES");
+				System.out.println("4. ROLLBACK INTO SAVEPOINT");
+				System.out.println("5. CHECK THE SAVEPOINTS LOGS ");
 				System.out.println("6. BACK");
 				System.out.println();
 				System.out.print("Option: ");
@@ -142,13 +149,13 @@ public class DbEmpolyeesDriver {
 						continue;
 					}
 				case 3:
-					System.out.println("Currently Working on it");
+					db.commit();
 					break;
 				case 4:
-					System.out.println("Currently Working on it");
+					db.rollback();
 					break;
 				case 5:
-					System.out.println("Currently Working on it");
+					db.gitLog();
 					break;
 				case 6:
 					break;
